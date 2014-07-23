@@ -7,7 +7,7 @@ import select
 bgfile = 'tennis.bmp'
 ppballfile = 'ppball.gif'
 HOSTSERVER = '' #No codigo, HOSTSERVER e incializado com endereco do player2
-HOSTCLIENT = '' 
+HOSTCLIENT = socket.gethostbyname(socket.gethostname())
 PORTSERVER = 8766
 PORTCLIENT = 8765
 
@@ -46,7 +46,7 @@ class Ball(object):
                 self.directionx *= -1
                 self.qtde_rebatidas+=1
                 
-                if(self.qtde_rebatidas%5==0): self.speed+=0.25
+                if(self.qtde_rebatidas%5==0): pass#self.speed+=0.25
                 
                 if(self.rect.y>=player.rect.y and self.rect.y<player.rect.y+40):
                     if(self.directiony>0):
@@ -67,7 +67,7 @@ class Ball(object):
         resulty = self.directiony * 5 * self.speed
         self.rect.x +=resultx
         self.rect.y +=resulty
-        data = str("ball:%s:%s"%(str(self.rect.x),str(self.rect.y)))
+        data = str("ball:%s:%s:"%(str(self.rect.x),str(self.rect.y)))
         out_socket.sendall(data.encode('ascii'))
         
 class Player(object):
@@ -116,8 +116,8 @@ try:
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.bind((HOSTCLIENT,PORTCLIENT))
     s.listen(1)
-    print("Esperando Oponente...")
-    s.settimeout(5)
+    print("Esperando Player 2 em %s:%i"%(HOSTCLIENT,PORTCLIENT))
+    s.settimeout(10)
     out_socket,addr = s.accept()
     print("Oponente Conectado: %s:%i"%(addr[0],addr[1]))
     

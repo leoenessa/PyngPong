@@ -116,9 +116,9 @@ if(menu_choice):
     elif(menu_choice==2):
         pass
     elif(menu_choice==3):
-        subprocess.Popen("PongMPServer.py")
+        subprocess.Popen("python PongMPServer.py")
     elif(menu_choice==4):
-        subprocess.Popen("PongMPClient.py")
+        subprocess.Popen("python PongMPClient.py")
     else:
         pass
     

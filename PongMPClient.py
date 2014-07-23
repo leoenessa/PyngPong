@@ -7,8 +7,8 @@ import errno
 
 bgfile = 'tennis.bmp'
 ppballfile = 'ppball.gif'
-HOSTSERVER = '127.0.0.1'
-HOSTCLIENT = 'localhost' 
+HOSTSERVER = '10.1.1.5'
+HOSTCLIENT = socket.gethostbyname(socket.gethostname())
 PORTSERVER = 8765
 PORTCLIENT = 8766
 
@@ -72,8 +72,7 @@ class Ball(object):
     def setPostition(self,dx,dy):
         self.rect.x = dx
         self.rect.y = dy
-        
-        
+             
 class Player(object):
     
     def __init__(self,tipo):
@@ -111,15 +110,16 @@ RED = (255,0,0)
 FPS = 60
 players = []
 read_sockets = []
+recieved_data = []
 
 try:
     in_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     in_socket.setblocking(1)
-    in_socket.connect((HOSTSERVER,PORTSERVER))
+    in_socket.connect((HOSTSERVER,PORTSERVER)) #Conexao com Player 1
     
     out_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     out_socket.setblocking(1)
-    out_socket.bind((HOSTCLIENT,PORTCLIENT))
+    out_socket.bind((HOSTCLIENT,PORTCLIENT)) #Espera conexao de Player 1
     out_socket.listen(1)
     
     conn,addr=out_socket.accept()
@@ -153,15 +153,18 @@ while(running):
         if s is in_socket:
             try:
                 data = in_socket.recv(64)
-                (objeto,dx,dy) = data.decode('ascii').split(':')
-                dx=int(dx)
-                dy=int(dy)
-                if(objeto=='player'):
-                    player1.move(dy,'net')
-                elif(objeto=='ball'):
-                    ball.setPostition(dx, dy)
+                recieved_data = data.decode('ascii').split(':')
+                print(len(recieved_data))
+                if(len(recieved_data)==6):
+                    player1.move(int(recieved_data[5]),'net')
+                    ball.setPostition(int(recieved_data[1]),int(recieved_data[2]))
                 else:
-                    pass
+                    if(recieved_data[0]=='player'):
+                        player1.move(int(recieved_data[2]),'net')
+                    elif(recieved_data[0]=='ball'):
+                        ball.setPostition(int(recieved_data[1]),int(recieved_data[2]))
+                    else:
+                        pass
                 
             except socket.error as e:
                 if(e.args[0] == errno.EWOULDBLOCK):
