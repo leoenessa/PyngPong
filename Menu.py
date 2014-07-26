@@ -29,10 +29,7 @@ class Menu(object):
                 screen.blit(opcao,(640/2-x/2,posicao_y_atual))
                 posicao_y_atual+=y+10
             
-            altura_por_item = (self.altura-10*qtde)/qtde  
-                 
-            #print("quantidade:%i\naltura total:%i\naltura opcao:%i"%(qtde,self.altura,altura_por_item))
-                        
+            altura_por_item = (self.altura-10*qtde)/qtde                          
             return(screen,self.posicao_opcao_1,altura_por_item)
 
 class ChRect(object):
@@ -72,7 +69,7 @@ screen = pygame.display.set_mode((640, 480))
 pygame.display.set_caption("Pyng Pong MENU - Sofia we Love you!")
 
 menu = Menu()
-opcoes_menu = ["Um Jogador","Multi Jogador vs PC","Multi Jogador Criar","Multi Jogador Entrar","SAIR"]
+opcoes_menu = ["Um Jogador","Multi Jogador No PC","Multi Jogador Criar","Multi Jogador Entrar","SAIR"]
 
 menu_surface = pygame.Surface((640,480))
 menu_surface.fill((0,0,0))
@@ -112,15 +109,18 @@ except BreakIt as bi:pass
 
 if(menu_choice):
     if(menu_choice==1):
-        subprocess.Popen("python PongSP.py")
-    elif(menu_choice==2):
         pass
+    elif(menu_choice==2):
+        subprocess.Popen("python PongSP.py")
+        pygame.quit()
+        sys.exit()
     elif(menu_choice==3):
         subprocess.Popen("python PongMPServer.py")
+        pygame.quit()
+        sys.exit()
     elif(menu_choice==4):
-        subprocess.Popen("python PongMPClient.py")
+        subprocess.Popen("python MenuGetIp.py")
+        pygame.quit()
+        sys.exit()
     else:
         pass
-    
-pygame.quit()
-sys.exit()

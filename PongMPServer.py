@@ -117,7 +117,7 @@ try:
     s.bind((HOSTCLIENT,PORTCLIENT))
     s.listen(1)
     print("Esperando Player 2 em %s:%i"%(HOSTCLIENT,PORTCLIENT))
-    s.settimeout(10)
+    s.settimeout(60)
     out_socket,addr = s.accept()
     print("Oponente Conectado: %s:%i"%(addr[0],addr[1]))
     

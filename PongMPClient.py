@@ -7,7 +7,7 @@ import errno
 
 bgfile = 'tennis.bmp'
 ppballfile = 'ppball.gif'
-HOSTSERVER = '10.1.1.5'
+HOSTSERVER = sys.argv[1] if(sys.argv[1]) else '127.0.0.1'
 HOSTCLIENT = socket.gethostbyname(socket.gethostname())
 PORTSERVER = 8765
 PORTCLIENT = 8766
@@ -143,6 +143,8 @@ last = pygame.time.get_ticks()
 
 read_sockets.append(in_socket)
 read_sockets.append(out_socket)
+
+print(HOSTSERVER)
                         
 while(running):
             
